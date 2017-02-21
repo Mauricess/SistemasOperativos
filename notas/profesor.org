@@ -1,0 +1,207 @@
+* Notas 
+
+** Primera clase
+*** Buscar 
+1. Memoria baja
+2. ROM
+3. RAM
+4. DRAM
+   
+** Segunda clase
+*** Estructura de la memoria
+
+Estructura de un programa en la memoria del sistema operativo.
+ ________
+|________| Stack (datos locales)
+|________| heap (memoria dinamica) <- malloc()
+|________| BSS <- datos no inicializados
+|________| Datos
+|________| Código, texto
+
+*** Investigar
+- Proceso de inicio de Linux
+
+ https://en.wikipedia.org/wiki/Linux_startup_process  
+
+- Limites a usuarios
+
+ http://www.tecmint.com/set-limits-on-user-processes-using-ulimit-in-linux/
+
+- Tipos de S.O.
+
+- Estructura de S.O.
+
+** Tercera clase
+*** Metodo de arranque de Linux
+
+- BIOS (UEFI, EFI)
+- MBR (Información al principio del disco)
+- GRUB (Gestor de arranque) (Carga drivers y módulos)
+  (Investigar)
+  - Etapa 1 
+  - Etapa 2
+(Hasta aquí se busca un sistema operativo)
+(Aquí comienza el SO)
+- Kernel
+init - initrd
+  /  - virtual
+
+
+ 512 bytes
+ _________________________________________________
+|Programa|Tabla de Part.|BV|GRUB |________________|
+
+
+El directorio /proc contiene todos los procesos que estan trabajando. Es un directorio virtual.
+*** Investigar
+1. Niveles de ejecución.
+
+** Cuarta clase
+*** Hasta el momento
+- Restricciones 
+  - Grupos
+  - Permisos
+
+- (r) Read (4)
+- (w) Write (2)
+- (x) Execute (1)
+permiso desh. (0)
+
+Ejemplo
+-rw-r-xr-x 2 juan alumnos
+
+El primer guion es el tipo de archivo
+El primeros son permisos del usuario, los dos siguientes son los permisos
+del grupo, y el ultimo son los permisos de otros usuarios.
+
+Para poner o quitar permisos es:
+
+-rw----r--
+ 420000400
+
+chmod 604 archivo
+
+De otro modo
+- prop - (u)    ~
+- grupo - (g)    } a - todos
+- otros - (o)   ~
+- habilitar (+)
+- deshabilitar (-)
+
+chmod o-r
+chmod ug+rx
+chmod go-rwx
+
+Tipos de archivo 
+regular (-)
+directory (d)
+character special (c)
+block special (b)
+pipe (p)
+symbolic link (l)
+socket (s)
+
+*** Tipos de S.O.
+
+- Monoproceso
+- Multiproceso
+- Multiusuario
+- Monousuario
+- Tiempo compartido
+- Tiempo real
+- Integrados
+
+*** Revisar
+
+Que significa el numero cuando hacemos  ls -l sobre un directorio
+
+Estructuras de S.O.
+
+** Quinta clase
+*** Tablas de Inodos 
+La tabla de inodos es una estructura que consta de una serie de 
+bloques consecutivos, cada uno de los cuales contiene un número de 
+inodos predefinidos. El número de bloque del primer bloque de la tabla
+de inodos se almacena en el campo bg_inode_table del descriptor de grupo.
+Todos los inodos tienen el mismo tamaño, 128 bytes. Un bloque de 1KB tiene 8 inodos, 
+mientras que uno de 4KB tiene 32 inodos. Para hacernos una idea de cuantos bloques
+ocupa la tabla de inodos, dividimos el número total de inodos en un grupo
+(almacenado en s_inodes_per_group del superbloque) por el número de inodos por bloque.
+*** Revisar
+Capitulo 2 Sección 1 del Silverchatz
+
+** Sexta clase
+*** Capitulo 2 Silberschatz
+
+- Servicios
+- Seguridad
+- Sistema de archivos
+- Memoria
+- Ejecución de programas
+- Interfaces (línea de comando, gráfica)
+ 
+        Monolíticos
+        Capas
+Kernel  Microkernel
+        Multinúcleo
+        Modular
+
+  +------------+
+ |  Usuarios  |
+  +------------+
+ | Interfaces |
+  +------------+
+ |Aplicaciones|
+  +------------+
+ |  Llamadas  |
+  +------------+
+ | Servicios  |
+  +------------+
+ |   Kernel   |
+  +------------+
+ |  Hardware  |
+  +------------+
+
+*** Iniciar servicios
+  - kdm
+  - gdm
+  - red
+  - sshd
+
+** Septima clase
+*** Estructura de un SO
+
+                  Usuarios
+  +---------------------------------------------+
+ |   linea de comandos | GUI      |   batchh  |
+  +---------------------------------------------+
+ |                Aplicaciones                 |
+  +---------------------------------------------+
+ |            Llamadas                         |
+  +---------------------------------------------+
+ | filesystem |            accounting          |
+  +--------------------------------------------------------+
+ | Procesos | Manejo de archivos |Conexion entre procesos |
+  +--------------------------------------------------------+
+ |                       Hardware                         |
+  +--------------------------------------------------------+ 
+  
+** Octava clase
+*** Llamadas.
+**** Control de procesos
+***** Finalizar procesos (exit())
+***** Espera (wait())
+***** Envío de señales (kill)
+***** Creación de procesos (fork())
+***** Ejecución (exec())
+**** Manejo de archivos
+***** Abrir: open()
+***** Leer: read()
+**** Dispositivos
+***** malloc()
+**** Comunicación
+***** write() (sockets)
+***** read() (sockets)
+**** Información
+***** date
+***** time
