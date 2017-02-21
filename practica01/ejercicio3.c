@@ -82,8 +82,10 @@ void ordena(int *merged, int n){
 
 int main (int argc, char const * argv[]){
 
+
   int A[] = {2,4,8,12,54,6,24,35,45,52};
   printArray(A,10);
   ordena(A,10);
   printArray(A,10);
+  return 0;
 }

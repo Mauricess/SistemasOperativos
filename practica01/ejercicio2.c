@@ -57,7 +57,7 @@ void pascal(int renglon, int **matrix){
 void renglonPascal(int renglon, int *array){
 
   *array = 1;
-  for(int i = 0; i < renglon; i++){
+  for(int i = 0; i < renglon - 1; i++){
     *(array + i + 1) = *(array + i) * (renglon - 1 - i) / (i + 1);
   }
 
@@ -75,7 +75,7 @@ int entradaPascal(int renglon, int columna){
   int *array = malloc(sizeof(int) * renglon);
   renglonPascal(renglon,array);
   res = *(array+columna-1);
-  //free(array);
+  free(array);
   return res;
 }
 
@@ -103,12 +103,12 @@ int main(int argc, char const *argv()){
   pascal(tam,matrix);
   printMatrix(matrix,tam,tam);
   free(matrix);
-  //matrix = NULL;
 
   printf("Ingresa el renglon que deseas obtener:\n");
   scanf(" %d", a1);
   renglonPascal(ren,array);
   printArray(array,ren);
+  free(array);
 
 
   printf("Ingresa las coordenas del elemento que deseas obtener.\n");
