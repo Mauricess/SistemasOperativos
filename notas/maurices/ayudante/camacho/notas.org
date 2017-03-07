@@ -285,3 +285,42 @@ deactivate Proceso1
 
 #+RESULTS:
 [[file:imagen3.png]]
+** Septima 
+
+*** Calendarización 
+Existen tres tipos:
+**** Corto plazo 
+Realiza cambio de contexto, señala el proceso que ejecutará después.
+No tarda más de 5~8 ms.
+**** Mediano plazo
+Realiza el cambio entre memoria y swap.
+Puede o no estar presente.
+**** Largo plazo (Multiprogramación)
+Limita el número total de procesos ejecutandose en un sistema en cierto momento.
+
+Administrador de procesos para optimizar el uso de recursos de cómputo.
+
+*** Creación de procesos
+(Al inicio sólo existía init...)
+
+**** Proceso Padre
+Un proceso actualmente en memoria que se esta ejecutando.
+Sirve como modelo de memoria.
+***** Es una plantilla para nuevos procesos.
+***** Tiene procesos hijos
+***** Árbol de jerarquía de Procesos
+Hace uso de la llamada al sistema fork()
+
+
+#+begin_src plantuml :file imagen4.png
+(init)
+(Proceso 1)
+(Proceso 2)
+(Proceso 3)
+(init) -> (Proceso 1)
+(init) -> (Proceso 2)
+(init) -> (Proceso 3)
+#+end_src
+
+#+RESULTS:
+[[file:imagen4.png]]
