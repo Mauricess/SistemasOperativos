@@ -1,0 +1,287 @@
+* Notas ayudante
+** Primera
+
+- Interfaz con usuarios
+- Proveedor de servicios (Interfaz de llamadas al sistema)
+- Administrador de recursos
+- Abstracción de hardware (máquina virtual)
+
+*** Conceptos
+
+- Kernel
+- Procesos
+- Memoria
+- Espacios de usuario
+- Subsistemas
+** Segunda
+*** Definiciones
+- Kernel
+- Procesos de sistema
+- Controladores de dispositivo / manejadores de dispositivos
+- Llamadas al sistema
+- Interrupciones
+- Vector de interrupciones
+_____________________________________
+|______________Usuario______________|
+  |         Aplicaciones          |
+    | API| Procesos del sistema |
+        | Kernel | (Núcleo) |   
+           |  Hardware  |  
+** Tercera
+*** Controladores
+ _______     _______     _______     _______
+|__Mem__|   |__USB__|   |_PCI I_|   |__CPU__|
+ Cntrld      Cntrld         |           |
+|  |            |           |           |
+|  --------------------------------------
+|                    | 
+Firmware  _________________________ 
+         |_Controlador de memoria__|
+	 |________Memoria_________ |
+
+Todos los dispositivos tienen un controlador, este se conecta con la memoria; en especifico con el controlador de la memoria.
+ _______
+|__Mem__|
+    |    \ DMA
+    |     \  _______________
+    |       |__Dispositivo__|
+ ___|____ /
+|__CPU__|/
+
+Los dispositivos ya pueden escribir directo a la memoria. Esta tecnología se llama DMA (Direct Access Memory)
+
+*** Interrupciones
+
+Interrupción.
+Existen de dos tipos.
+- HW
+- Software
+
+Al iniciar el sistema operativo se inicia el BIOS o UEFI.
+En el caso del BIOS se inicia el vector de interrupciones
+ - Direcciones bajas (cerca del cero)
+ - Tabla de llamadas al sistema
+
+ ____          ________
+|BIOS|  ----> |_Kernel_|
+|UEFI|  Jump Inicio Kernel
+
+
+init es el primer proceso que inicia, tiene el número 0. Todos los procesos son hijos de este 
+
+- Llamada al sistema (syscall)
+Las llamadas al sistema deben estar definidas en la memoria.
+
+*** Procesos
+  _____________________
+ | _Espacio de usuario_|
+ |     |API Syscall|   |
+ |  Sistema Operativo  |
+ |     __________      |
+ |____|__Kernel__|_____|
+ 
+** Cuarta
+*** Servicios
+
+Estos son los servicios elementales que debe ofrecer cualquier SO:
+
+1. Administración de Memoria
+2. Calanderización de CPU
+3. Operaciones de entrada y salida
+  
+*** Manejador de dispositivo
+
+ +------------+
+| Usuarios   |
+ +------------+
+|Prg.Usuarios|
+ +------------+
+|Bibliotecas |
+ +------------+
+| Syscalls   |
+ +------------+
+|Serv. Elemnt|
+ +------------------+
+|Kernel(Manejador) |
+ +------------------+
+|Controladores|
+ +-------------+
+|  Hardware   |
+ +-------------+
+ +---+
+|CPU|  (Device Driver)
+ +---+    Manejador de dispositivo
+  ^   
+  |   Traducir idioma kernel a idioma controlador
+  v  
+ +-------------------+
+| MCU | Controlador | -> Controlador  
+ +-------------------+
+      |      HD     |   Expone API
+       +-------------+    Habla con HW
+
+*** Tipos de estructura de Kernel
+
+1. Monolítico
+2. Modular
+3. Microkernel
+4. Híbrido
+** Quinta
+*** Tipos de estructura de Kernel
+
+1. Monolítico
+ +-------------------+
+|Espacio de usuario |
+ +-------------------+
+        |
+ +-------------------+
+|  Kernel (S.O.)    |
+ +-------------------+
+        |
+ +-------------------+
+|       HW          |
+ +-------------------+
+2. Modular
+El codigo de los modulos se ejecutan en modo privilegiado.
+3. Microkernel
+El codigo de los modulos se ejecutan en modo normal.
+  +-----------------+
+ |Syscal | Biblio  | (Modulos)
+  +-----------------+
+     |         |
+  +-------------------+
+ |  (Micro Kernel)   |
+ |Calendarizador     |
+ |  Admin Memoria    |
+ |   Admin Procesos  |
+  +-------------------+
+         |
+  +-------------------+
+ |        HW         |
+  +-------------------+
+4. Híbrido
+*** Diseño por capas
+
+Cada capa va a contar con una interfaz, consumiendo con los servicios de las capa inferior.
+
+                   +-------------------------+
+                   |   Espacio usuario       |
+                   +-------------------------+
+                   |Interfaz llamadas sistema|
+                   +-------------------------+
+                   |Scheduler |Admin. Memoria|
+                   +-------------------------+
+                   |Manejador de Dispositivos|
+                   +-------------------------+
+                        |     HW     |
+                        +------------+
+Multics fue un SO militar. Se creo Unics apartir de esta, evolucionando en Unix.
+
+*** Temas de examen
+1. ¿Qué es un sistema operativo?
+2. ¿Cuál es la finalidad de un S.O.?
+3. Diferencias entre:
+   - (CPU) Modo usuario y modo privilegiado
+Conjunto de instrucciones, tamaño de los registros.
+   - Manejador y controlador
+4. ¿Cuál es el proceso de arranque de una computadora?
+5. ¿Qué es un kernel?
+- Es la abstracción del hardware.
+6. ¿Qué es una llamada al sistema?
+7. ¿Qué es una interrupción?
+   - De HW
+   - De SW
+8. ¿Qué tipos de estructura de kernel existen?
+** Sexta
+*** Proceso
+1. Código (sección texto)
+2. Contador de programa
+3. Valores temporales
+4. Datos del programa
+5. Pila
+6. Heap
++------------+
+|   Stack    |
++------------+
+|     |      |
+|     v      |   (Memoria alojada
+|     ^      |    en tiempo de ejecución)
+|     |      |
++------------+
+|   Heap     |
++------------+
+|   Datos    |
++------------+
+|   Texto    |
++------------+
+
+Dos instancias de un programa =>
+Dos procesos en ejecución con la misma sección
+de texto, todo lo demás es distinto.
+
+**** Estado de un proceso
+Los procesos compiten por recursos, i.e. no siempre están ejecutando su sección de texto.
+***** En ejecución
+***** Listo para ejecutarse
+***** En espera
+***** Nuevo (Recién creado)
+***** Terminado
+***** Gráfica
+#+begin_src plantuml :file imagen1.png
+(Nuevo)
+(Listo para ejecutarse)
+(En ejecución)
+(En espera)
+(Terminado)
+(Nuevo) --> (Listo para ejecutarse) : Admitido
+(Listo para ejecutarse) --> (En ejecución) : Escogido por calanderizador
+(En ejecución) --> (Listo para ejecutarse) : Interrupción
+(En ejecución) --> (En espera) : Llamada E/S o evento espera
+(En ejecución) --> (Terminado) : exit()
+(En espera) --> (Listo para ejecutarse) : Llamada I/O terminada
+#+end_src
+
+#+RESULTS:
+[[file:imagen1.png]]
+
+**** Process Control Block (PCB)
+
+Estructura de datos que define a un proceso dentro del kernel.
+- Identificador de procesos (PID)
+- Estado de proceso
+- Dirección inicial del proceso
+- Información de memoria
+- Proceso padre (Parent process)
+- Usuario que lo mandó a llamar
+- Tiempo vivo
+- Información de los registros del CPU
+- Información contable
+
+
+Ya tenemos estructuras de datos que nos ayudan a controlar los procesos
+tan solo con el estado.
+
+#+begin_src plantuml :file imagen2.png
+usecase UC1 as "Procesos en ejecución 
+-- 
+Cola de procesos en espera
+--
+Cola de procesoso listos"
+#+end_src
+#+RESULTS:
+[[file:imagen2.png]]
+
+- En ejecución
+- Lista para ejecutarse
+- En espera
+- Nuevo (Recién creado)
+
+
+#+begin_src plantuml :file imagen3.png
+activate Proceso1
+Proceso1 -> Proceso2: Llamada al sistema \n- Guarda PCB(1) \n- Cambia de estado
+deactivate Proceso1
+#+end_src
+
+#+RESULTS:
+[[file:imagen3.png]]

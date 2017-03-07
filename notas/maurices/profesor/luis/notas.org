@@ -1,13 +1,12 @@
 * Notas 
-
-** Primera clase
+** Primera
 *** Buscar 
 1. Memoria baja
 2. ROM
 3. RAM
 4. DRAM
    
-** Segunda clase
+** Segunda
 *** Estructura de la memoria
 
 Estructura de un programa en la memoria del sistema operativo.
@@ -31,7 +30,7 @@ Estructura de un programa en la memoria del sistema operativo.
 
 - Estructura de S.O.
 
-** Tercera clase
+** Tercera
 *** Metodo de arranque de Linux
 
 - BIOS (UEFI, EFI)
@@ -56,7 +55,7 @@ El directorio /proc contiene todos los procesos que estan trabajando. Es un dire
 *** Investigar
 1. Niveles de ejecución.
 
-** Cuarta clase
+** Cuarta
 *** Hasta el momento
 - Restricciones 
   - Grupos
@@ -117,20 +116,15 @@ Que significa el numero cuando hacemos  ls -l sobre un directorio
 
 Estructuras de S.O.
 
-** Quinta clase
+** Quinta
 *** Tablas de Inodos 
 La tabla de inodos es una estructura que consta de una serie de 
 bloques consecutivos, cada uno de los cuales contiene un número de 
-inodos predefinidos. El número de bloque del primer bloque de la tabla
-de inodos se almacena en el campo bg_inode_table del descriptor de grupo.
-Todos los inodos tienen el mismo tamaño, 128 bytes. Un bloque de 1KB tiene 8 inodos, 
-mientras que uno de 4KB tiene 32 inodos. Para hacernos una idea de cuantos bloques
-ocupa la tabla de inodos, dividimos el número total de inodos en un grupo
-(almacenado en s_inodes_per_group del superbloque) por el número de inodos por bloque.
+inodos predefinidos. 
 *** Revisar
 Capitulo 2 Sección 1 del Silverchatz
 
-** Sexta clase
+** Sexta
 *** Capitulo 2 Silberschatz
 
 - Servicios
@@ -167,8 +161,7 @@ Kernel  Microkernel
   - gdm
   - red
   - sshd
-
-** Septima clase
+** Septima
 *** Estructura de un SO
 
                   Usuarios
@@ -186,7 +179,7 @@ Kernel  Microkernel
  |                       Hardware                         |
   +--------------------------------------------------------+ 
   
-** Octava clase
+** Octava
 *** Llamadas.
 **** Control de procesos
 ***** Finalizar procesos (exit())
@@ -205,3 +198,48 @@ Kernel  Microkernel
 **** Información
 ***** date
 ***** time
+** Novena
+*** Estructura de Kernel
+1. Monolítico (Un gran bloque que contiene todas las funcionalidades)
+2. Microkernel (Un bloque pequeño, puede cargarse mas modulos)
+3. Modular
+4. Capas (Las funciones son encapsuladas en la siguiente capa aplicada. Agrega sobrecarga al SO)
+5. Híbrido (Se tiene un kernel con algunas funciones pero se puede expandir con modulos)
+** Decima
+*** Proceso
+Revisar las notas del ayudante.
+
+El espacio de memoria de un programa es un bloque de
+memoria. Su base es donde se termina y el limite es el
+tamaño del bloque.
+
+Se puede solicitar un espacio de direcciones adicional
+al SO, solo si este lo sosporta.
+
+*** Scheduler
+Determina la forma en que se va a ejecutar la cola de procesos.
+Una manera de orgnizar a los procesos.
+
+**** long-term
+Se encarga de atender los procesos que estan en estado de espera.
+**** short-term
+Se encarga de atender los procesos que estan en estado ready.
+**** medium-term
+Decide cuando cambia procesos de memoria principal a swap.
+** Onceava
+*** Expansión de Expresiones (Comandos)
+#+begin_src shell
+ls -l *.txt
+ls -l ~/datos.txt
+#+end_src
+Resolver las rutas a la que este haciendo referencia el usuario.
+(Investigar)
+*** Scheduler
+Programa que decide quien es el siguiente proceso que utilizará el
+procesador. 
+*** Estado del proceso
+Los valores que se encuentran en el momento actual en el proceso.
+*** Despachador
+**** Cambio de contexto
+Toma el estado del proceso actual, lo guarda; después toma el estado 
+del proceso que entrara en ejecución y lo pone en el procesador.
