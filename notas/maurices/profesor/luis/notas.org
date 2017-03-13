@@ -243,3 +243,64 @@ Los valores que se encuentran en el momento actual en el proceso.
 **** Cambio de contexto
 Toma el estado del proceso actual, lo guarda; después toma el estado 
 del proceso que entrara en ejecución y lo pone en el procesador.
+** Doceava
+Viernes antes de mi cumpleaños. Referirse a las de Andres.
+** Treceava
+*** Sección crítica
+Parte del codigo en donde se manejan variables compartidas.
+**** Solución de Peterson 
+#+begin_src c
+int bandera[2] = {0,0};
+turno  // No es necesario asignar un turno
+// Esta es un ejemplo de espera ocupada
+  p0: bandera[0] = 1;                            p1: bandera[1] = 1;
+      turno = 1;                                 turno = 0;
+      while(bandera[1] && turno == 1);           while(bandera[0] && turno == 0);
+           {/*no hace nada; espera.*/}              {/*no hace nada; espera.*/}
+      turno = 0;                                 turno = 1;
+      // sección crítica                         // sección crítica
+
+      // fin de la sección crítica              // fin de la sección crítica
+      bandera[0] = 0                             bandera[1] = 0
+#+end_src
+**** Condición de carrera
+Es un evento de la computación concurrente en donde la escritura o lectura de variables
+compartidas puede comprometer su integridad. 
+***** Alto nivel
+#+begin_src java
+// Inicio
+c = 2
+
+// Proceso A
+c = c-1
+if (c > 0){
+   log(c)
+}
+
+// Proceso B
+c = c-1
+if(c > 0){
+   log(c)   
+}
+#+end_src
+***** Nivel de maquina
+#+begin_src mips
+// Proceso A
+R1 <- c
+R2 <- R1-1
+c <- R2
+gt (c,0)
+--------- Cambio de contexto
+log c
+// Proceso B
+R2 <- c
+AC <- R2-1
+c <- AC
+gt (c,0)
+log c
+#+end_src
+**** Tipos de Kernel
+***** Apropiativos (preemted)
+Corta la ejecución de un proceso cuando lo cree necesario.
+***** No apropiativo
+El proceso es quien determina cuando se deja de ejecutar.
