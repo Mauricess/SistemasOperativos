@@ -226,7 +226,7 @@ Se encarga de atender los procesos que estan en estado de espera.
 Se encarga de atender los procesos que estan en estado ready.
 **** medium-term
 Decide cuando cambia procesos de memoria principal a swap.
-** Onceava
+** Undécima
 *** Expansión de Expresiones (Comandos)
 #+begin_src shell
 ls -l *.txt
@@ -243,9 +243,9 @@ Los valores que se encuentran en el momento actual en el proceso.
 **** Cambio de contexto
 Toma el estado del proceso actual, lo guarda; después toma el estado 
 del proceso que entrara en ejecución y lo pone en el procesador.
-** Doceava
+** Duodécima
 Viernes antes de mi cumpleaños. Referirse a las de Andres.
-** Treceava
+** Decimotercera
 *** Sección crítica
 Parte del codigo en donde se manejan variables compartidas.
 **** Solución de Peterson 
@@ -304,3 +304,30 @@ log c
 Corta la ejecución de un proceso cuando lo cree necesario.
 ***** No apropiativo
 El proceso es quien determina cuando se deja de ejecutar.
+** Decimocuarta
+*** Sección crítica
+
+**** Condiciones
+***** Exclusión mutua
+      Solo un proceso puede acceder a su sección crítica.
+***** Progreso
+***** Espera acotada
+
+**** Lectores y escritores.
+
+#+begin_src c
+int BUFFER_SIZE = 10;
+int posSig = 0;
+int sig;
+
+// Productor
+sig = prod_nuevo();
+while(posSig == BUFFER_SIZE){}
+buffer[posSig] = sig;
+posSig++;
+
+// Consumidor
+while(posSig-1 < 0){}
+procesa = buffer[posSig-1];
+posSig--;
+#+end_src
