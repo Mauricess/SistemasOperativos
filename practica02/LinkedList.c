@@ -13,8 +13,6 @@ int main (void){
   for (i = 0; i < 5; i++) {
     addToEnd(rand() % 100, list);
   }
-  printf("Se imprime la lista.\n");
-  print(list);
   printf("Se agrega el valor 3 a la lista en la posicion 0; es decir, la cabeza, mediante \"add()\"\n");
   add(3, list, 0);
   print(list);
@@ -23,6 +21,17 @@ int main (void){
   print(list);
   printf("Tamano de la lista: %d\n", size(list));
   printf("Es vacia?: %d\n", isEmpty(list));
-
+  for (i = 0; i < 20; i++) {
+    addToEnd(rand() % 100, list);
+  }
+  printf("\n\n EJEMPLO DEL ORDENAMIENTO CON LA LISTA DE TAMANO %d :\n", size(list));
+  print(list);
+  printf("Ordenando...\n");
+  struct list *res =order(list);
+  printf("RESULTADO:\n");
+  print(res);
+  printf("insertar numero 1 a la lista:\n");
+  insert_ordered(res, 1);
+  print(res);
   return 0;
 }
