@@ -286,7 +286,6 @@ deactivate Proceso1
 #+RESULTS:
 [[file:imagen3.png]]
 ** Septima 
-
 *** Calendarización 
 Existen tres tipos:
 **** Corto plazo 
@@ -324,3 +323,22 @@ Hace uso de la llamada al sistema fork()
 
 #+RESULTS:
 [[file:imagen4.png]]
+** Octava
+** Novena
+
+*** Comunicación interproceso
+**** Memoria compartida
+**** Paso de mensajes
+***** Buzón de correo
+     Si un proceso crea un buzón de correo, solo puede leer mensajes que lleguén a el. 
+     Son archivos de escucha.
+***** Tuberias (Caso especial de sockets, sockets de unix)
+     Con pipe(int fd[]); se crea un archivo
+     El proceso que lo llama solo puede escribir, al que se le pasa solo puede leer.
+     Gracias a que llamamos fork() se compia el PCB junto con los descriptores de archivo.
+***** Sockets
+     El punto final entre la comunicación de procesos.
+     Estructura de datos asociada a un archivo. (Administrado por el kernel)
+     - Tupla = (direccion IP, puerto)
+       puerto = int 65535 (8 bits)
+       Si el puerto es menor a 1024 son puertos bien conocidos (Reservado por el kernel)

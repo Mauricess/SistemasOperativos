@@ -306,7 +306,6 @@ Corta la ejecución de un proceso cuando lo cree necesario.
 El proceso es quien determina cuando se deja de ejecutar.
 ** Decimocuarta
 *** Sección crítica
-
 **** Condiciones
 ***** Exclusión mutua
       Solo un proceso puede acceder a su sección crítica.
@@ -331,3 +330,33 @@ while(posSig-1 < 0){}
 procesa = buffer[posSig-1];
 posSig--;
 #+end_src
+** Decimoquinta
+*** Problema de sección crítica
+**** Espera acotada
+**** Exclusión mutua
+**** Progreso
+
+#+begin_src c
+boolean flags[2] = {false,false};
+int turno = 0;
+
+do{
+   // Entrada
+   flags[0] = true;
+   turno = 1; // Condición de carrera
+   // Espera ocupada
+   while(flags[0] == true && turno == 1){
+      //Seccion crítica
+   }
+   // Salida
+   flags[0] = false;
+}
+#+end_src
+
+
+**** Revisar
+La condición de carrera.
+test_and_set
+compare_and_swap
+
+Examén es el viernes.
