@@ -325,9 +325,11 @@ Hace uso de la llamada al sistema fork()
 [[file:imagen4.png]]
 ** Octava
 ** Novena
-
 *** Comunicación interproceso
+Surge de la dependencia de datos entre dos o mas procesos. Forma de manejar esta dependencia.
 **** Memoria compartida
+Más fácil de implementar. Declaras un pedazo de memoria en donde le pones banderas para que pueda 
+ser leído y escrito por otros procesos. 
 **** Paso de mensajes
 ***** Buzón de correo
      Si un proceso crea un buzón de correo, solo puede leer mensajes que lleguén a el. 
@@ -342,3 +344,39 @@ Hace uso de la llamada al sistema fork()
      - Tupla = (direccion IP, puerto)
        puerto = int 65535 (8 bits)
        Si el puerto es menor a 1024 son puertos bien conocidos (Reservado por el kernel)
+** Decima
+*** Hilos
+Unidad básica de uso de CPU.
+Un hilo a diferencia de un proces no cuenta con espacio de texto, datos y descriptores de archivos.
+Es más rápido crear un hilo que un proceso.
+Necesita de hardware especial para su implementación.
+
+**** Estructura
+***** Contador de programa
+***** Conjunto de registros
+***** Pila
+
+**** Razónes para crear hilos 
+***** Mejor respuesta
+***** Escabilidad
+***** Administración de recursos
+***** Creación rápida
+
+**** Depende de la naturaleza del problema
+***** Dependencia
+****** Datos
+****** Cómputo
+
+**** Primer CPU con soporte hilos
+***** Intel Core Duo
+****** Pentium 4
+****** 2 hilos de ejecución
+****** Arquitectura x86
+
+**** Definir
+***** Trabajo a asignar por hilo
+Bibliotecas. En Unix tenemos Pthreads. Se encarga de Administración
+de los hilos o solo la creación de estos.
+***** ¿Cómo manejar Interrupciones?
+***** ¿Cuándo terminar la ejecución?
+***** ¿Cómo regresar información procesada por cada hilo?
