@@ -360,3 +360,44 @@ test_and_set
 compare_and_swap
 
 Examén es el viernes.
+** Decimosexta
+*** Soluciones por Hardware (Condición de carrera)
+**** Operaciones atómicas
+***** test and set
+#+begin_src c
+// Test and set
+boolean test_and_set(boolean *t){
+   boolean r = *t;
+   *t = true;
+   return(r);
+}
+
+// Sección crítica
+void Critical() {
+    while (test_and_set(&lock));
+    critical section; // only one process can be in this section at a time
+    lock = false; // release lock when finished with the critical section
+}
+#+end_src
+***** compare and swap
+#+begin_src c
+// Metodo Compare and Swap
+int compare_and_swap(int *v, int esp, int nuevo){
+   int t = *v;
+   if(*v == esp){
+      *v == nuevo;
+   }
+   return(t);
+}
+
+// Sección crítica
+int lock = 0;
+void Critical(){
+   while(compare_and_swap(lock, 0, 1) != 0);
+   critical section;
+   lock = 0; 
+}
+#+end_src
+**** Vector de interrupciones
+***** Desactivar
+Puede no ser efectivo si se tiene mas de un núcleo de procesamiento.
