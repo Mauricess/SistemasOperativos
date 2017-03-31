@@ -380,3 +380,80 @@ de los hilos o solo la creación de estos.
 ***** ¿Cómo manejar Interrupciones?
 ***** ¿Cuándo terminar la ejecución?
 ***** ¿Cómo regresar información procesada por cada hilo?
+** Undecima
+*** Ley de Amdahl (Pregunta de examén)
+Describe la ganancia (en velocidad) para resolver un problema utilizando
+varios núcleos de procesamiento.
+1. Comparado con un sisteama de un solo núcleo de procesamiento
+2. Sea S el porcentaje del programa que hace uso de varios núcleos, sea N el número de 
+núcleos, la ganancia en velocidad (Speedup)
+
+Speedup =< 1/(S+((1/S)/N)) 
+
+*** Implementación de hilos
+**** Espacio de usuario
+Ventajas:
++ Son ligeros (fáciles de crear)
++ Rapidos (no hay cambio de contexto)
+Deventajas:
+- Se puede bloquear
+**** Kernel
++ Creación de hilos es una llamada al sistema
++ Se pueden apartar recursos por hilo
++ Los hilos son una estructura de datos dentro del Kernel
+- Puedo agotar los hilos del Kernel
+
+Cuando un hilo de espacio de usuario ejecuta una llamada al sistema
+un hilo de Kernel atiende dicha llamada al sistema.
+
+**** Modelos ejecución de hilos
+***** Uno a Uno
+****** hilo esp. usuario
+****** Magia
+****** hilo de kernel
+***** Muchos a Uno
+
+    |  |   |   |  |
+    \  |   |   |  /      -> Hilo espacio usuario
+     \ |   |   | /
+       ( Magia )
+           |         -> Hilo kernel
+
+***** Muchos a muchos
+
+    |   |   |   |   |
+    |   |   |   |   |  -> Usuario
+    (     Magia     )
+    |   |   |   |   |  -> Kernel
+    |   |   |   |   |   
+
+****** Políticas
+ No. hilos de Kernel por Proceso
+ Piscina de hilos (Thread pool)
+ No. fijo hilos de kernel al iniciar el S.O.
+
+
+***** Dos niveles
+** Duodecima
+*** Mutex
+Es una forma de crear exclusión mutua. 
+Es parte del Software.
+Tiene dos funciones acquire() y release()
+
+#+begin_src c 
+available = true;
+acquire(){
+   while(!available)
+      ; /* espera ocupada*/
+   available = false;
+}
+release(){
+   available = true;
+}
+#+end_src
+
+*** Semaforors
+Existen de dos tipos: binarios y contadores.
+Es una forma de obtener exclusión mutua.
+Es parte del Software.
+Tiene dos funciones wait() y signal().
