@@ -1,0 +1,10 @@
+- Analizar si para este problema es más conveniente usar threads o procesos.
+
+Para este problema, tras haber realizado y revisado la implementación tanto con threads como con procesos, se puede decir que
+resulta más conveniente la ejecución con threads. Esto, ya que hilos hermanos comparten el espacio de datos entre sí (es
+decir, hijos del mismo proceso), lo cual significa que por default pueden comunicarse mediante memoria compartida. Por otro lado,
+para los procesos, ya que estos no comparten espacio de datos, variables que se modifiquen en cierto proceso no tienen repercusión
+sobre otros procesos, y al momento de querer operar con, por ejemplo, variables globales en este problema, no se tendrán los
+resultados correctos, ya que un proceso editó alguna, uno otra y así respectivamente. Para implementar lo mismo que con los threads
+habría que revisar comunicación interproceso; lo cual resulta complicado. Así entonces, por simplicidad y facilidad de manejo de los datos
+compartidos, para este problema resulta más conveniente el uso de threads.

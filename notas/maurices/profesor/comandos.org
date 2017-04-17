@@ -1,0 +1,39 @@
+* Comandos
+** Notas
+Si tenemos un redireccionamiento hay que tener cuidado ya que
+con > sobre escribimos y con >> concatenamos.
+
+Con <signal.h> podemos cambiar el comportamiento del programa
+dependiendo la señal que reciba.
+
+En /etc/shells es donde se encuentran los shells soportados.
+
+** Comandos generales
+1. runlevel (Nivel de ejecución actual)
+2. uname (Kernel)
+3. ln (Crear una liga dura con -s se crea uno soft)
+4. lsmod (Indica los módulos que estan cargados en el Kernel)
+5. rmmod (Elimina el módulo de la memoria)
+6. insmod (Instala un módulo)
+7. modprobe (Instala un módulo pero verifica si es compatible)
+8. crontab
+9. at
+10. nohup (Pasa el proceso a kernel/init)
+11. whoami
+12. lsof
+13. keylogger
+14. com & (correr en segundo plano)
+15. wc (word count)
+16. top
+17. ps
+** Comandos para revisar discos o archivos
+1. fdisk (Modificar la tabla de particiones)
+2. mkfs
+3. chkdsk /dev/sda (Solo se puede hacer en nivel de mantenimiento)
+4. badblocks /dev/sda 
+5. stat
+6. lsof (Checa los archivos abiertos) 
+7. wc
+8. sort
+** Pruebas
+$ find / "*.txt" -exec wc -1 {} \; > /tmp/datos 2 > /temp/errores &

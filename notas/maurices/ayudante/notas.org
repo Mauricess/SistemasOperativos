@@ -1,0 +1,459 @@
+* Notas ayudante
+** Primera
+
+- Interfaz con usuarios
+- Proveedor de servicios (Interfaz de llamadas al sistema)
+- Administrador de recursos
+- Abstracción de hardware (máquina virtual)
+
+*** Conceptos
+
+- Kernel
+- Procesos
+- Memoria
+- Espacios de usuario
+- Subsistemas
+** Segunda
+*** Definiciones
+- Kernel
+- Procesos de sistema
+- Controladores de dispositivo / manejadores de dispositivos
+- Llamadas al sistema
+- Interrupciones
+- Vector de interrupciones
+_____________________________________
+|______________Usuario______________|
+  |         Aplicaciones          |
+    | API| Procesos del sistema |
+        | Kernel | (Núcleo) |   
+           |  Hardware  |  
+** Tercera
+*** Controladores
+ _______     _______     _______     _______
+|__Mem__|   |__USB__|   |_PCI I_|   |__CPU__|
+ Cntrld      Cntrld         |           |
+|  |            |           |           |
+|  --------------------------------------
+|                    | 
+Firmware  _________________________ 
+         |_Controlador de memoria__|
+	 |________Memoria_________ |
+
+Todos los dispositivos tienen un controlador, este se conecta con la memoria; en especifico con el controlador de la memoria.
+ _______
+|__Mem__|
+    |    \ DMA
+    |     \  _______________
+    |       |__Dispositivo__|
+ ___|____ /
+|__CPU__|/
+
+Los dispositivos ya pueden escribir directo a la memoria. Esta tecnología se llama DMA (Direct Access Memory)
+
+*** Interrupciones
+
+Interrupción.
+Existen de dos tipos.
+- HW
+- Software
+
+Al iniciar el sistema operativo se inicia el BIOS o UEFI.
+En el caso del BIOS se inicia el vector de interrupciones
+ - Direcciones bajas (cerca del cero)
+ - Tabla de llamadas al sistema
+
+ ____          ________
+|BIOS|  ----> |_Kernel_|
+|UEFI|  Jump Inicio Kernel
+
+
+init es el primer proceso que inicia, tiene el número 0. Todos los procesos son hijos de este 
+
+- Llamada al sistema (syscall)
+Las llamadas al sistema deben estar definidas en la memoria.
+
+*** Procesos
+  _____________________
+ | _Espacio de usuario_|
+ |     |API Syscall|   |
+ |  Sistema Operativo  |
+ |     __________      |
+ |____|__Kernel__|_____|
+ 
+** Cuarta
+*** Servicios
+
+Estos son los servicios elementales que debe ofrecer cualquier SO:
+
+1. Administración de Memoria
+2. Calanderización de CPU
+3. Operaciones de entrada y salida
+  
+*** Manejador de dispositivo
+
+ +------------+
+| Usuarios   |
+ +------------+
+|Prg.Usuarios|
+ +------------+
+|Bibliotecas |
+ +------------+
+| Syscalls   |
+ +------------+
+|Serv. Elemnt|
+ +------------------+
+|Kernel(Manejador) |
+ +------------------+
+|Controladores|
+ +-------------+
+|  Hardware   |
+ +-------------+
+ +---+
+|CPU|  (Device Driver)
+ +---+    Manejador de dispositivo
+  ^   
+  |   Traducir idioma kernel a idioma controlador
+  v  
+ +-------------------+
+| MCU | Controlador | -> Controlador  
+ +-------------------+
+      |      HD     |   Expone API
+       +-------------+    Habla con HW
+
+*** Tipos de estructura de Kernel
+
+1. Monolítico
+2. Modular
+3. Microkernel
+4. Híbrido
+** Quinta
+*** Tipos de estructura de Kernel
+
+1. Monolítico
+ +-------------------+
+|Espacio de usuario |
+ +-------------------+
+        |
+ +-------------------+
+|  Kernel (S.O.)    |
+ +-------------------+
+        |
+ +-------------------+
+|       HW          |
+ +-------------------+
+2. Modular
+El codigo de los modulos se ejecutan en modo privilegiado.
+3. Microkernel
+El codigo de los modulos se ejecutan en modo normal.
+  +-----------------+
+ |Syscal | Biblio  | (Modulos)
+  +-----------------+
+     |         |
+  +-------------------+
+ |  (Micro Kernel)   |
+ |Calendarizador     |
+ |  Admin Memoria    |
+ |   Admin Procesos  |
+  +-------------------+
+         |
+  +-------------------+
+ |        HW         |
+  +-------------------+
+4. Híbrido
+*** Diseño por capas
+
+Cada capa va a contar con una interfaz, consumiendo con los servicios de las capa inferior.
+
+                   +-------------------------+
+                   |   Espacio usuario       |
+                   +-------------------------+
+                   |Interfaz llamadas sistema|
+                   +-------------------------+
+                   |Scheduler |Admin. Memoria|
+                   +-------------------------+
+                   |Manejador de Dispositivos|
+                   +-------------------------+
+                        |     HW     |
+                        +------------+
+Multics fue un SO militar. Se creo Unics apartir de esta, evolucionando en Unix.
+
+*** Temas de examen
+1. ¿Qué es un sistema operativo?
+2. ¿Cuál es la finalidad de un S.O.?
+3. Diferencias entre:
+   - (CPU) Modo usuario y modo privilegiado
+Conjunto de instrucciones, tamaño de los registros.
+   - Manejador y controlador
+4. ¿Cuál es el proceso de arranque de una computadora?
+5. ¿Qué es un kernel?
+- Es la abstracción del hardware.
+6. ¿Qué es una llamada al sistema?
+7. ¿Qué es una interrupción?
+   - De HW
+   - De SW
+8. ¿Qué tipos de estructura de kernel existen?
+** Sexta
+*** Proceso
+1. Código (sección texto)
+2. Contador de programa
+3. Valores temporales
+4. Datos del programa
+5. Pila
+6. Heap
++------------+
+|   Stack    |
++------------+
+|     |      |
+|     v      |   (Memoria alojada
+|     ^      |    en tiempo de ejecución)
+|     |      |
++------------+
+|   Heap     |
++------------+
+|   Datos    |
++------------+
+|   Texto    |
++------------+
+
+Dos instancias de un programa =>
+Dos procesos en ejecución con la misma sección
+de texto, todo lo demás es distinto.
+
+**** Estado de un proceso
+Los procesos compiten por recursos, i.e. no siempre están ejecutando su sección de texto.
+***** En ejecución
+***** Listo para ejecutarse
+***** En espera
+***** Nuevo (Recién creado)
+***** Terminado
+***** Gráfica
+#+begin_src plantuml :file imagen1.png
+(Nuevo)
+(Listo para ejecutarse)
+(En ejecución)
+(En espera)
+(Terminado)
+(Nuevo) --> (Listo para ejecutarse) : Admitido
+(Listo para ejecutarse) --> (En ejecución) : Escogido por calanderizador
+(En ejecución) --> (Listo para ejecutarse) : Interrupción
+(En ejecución) --> (En espera) : Llamada E/S o evento espera
+(En ejecución) --> (Terminado) : exit()
+(En espera) --> (Listo para ejecutarse) : Llamada I/O terminada
+#+end_src
+
+#+RESULTS:
+[[file:imagen1.png]]
+
+**** Process Control Block (PCB)
+
+Estructura de datos que define a un proceso dentro del kernel.
+- Identificador de procesos (PID)
+- Estado de proceso
+- Dirección inicial del proceso
+- Información de memoria
+- Proceso padre (Parent process)
+- Usuario que lo mandó a llamar
+- Tiempo vivo
+- Información de los registros del CPU
+- Información contable
+
+
+Ya tenemos estructuras de datos que nos ayudan a controlar los procesos
+tan solo con el estado.
+
+#+begin_src plantuml :file imagen2.png
+usecase UC1 as "Procesos en ejecución 
+-- 
+Cola de procesos en espera
+--
+Cola de procesoso listos"
+#+end_src
+#+RESULTS:
+[[file:imagen2.png]]
+
+- En ejecución
+- Lista para ejecutarse
+- En espera
+- Nuevo (Recién creado)
+
+
+#+begin_src plantuml :file imagen3.png
+activate Proceso1
+Proceso1 -> Proceso2: Llamada al sistema \n- Guarda PCB(1) \n- Cambia de estado
+deactivate Proceso1
+#+end_src
+
+#+RESULTS:
+[[file:imagen3.png]]
+** Septima 
+*** Calendarización 
+Existen tres tipos:
+**** Corto plazo 
+Realiza cambio de contexto, señala el proceso que ejecutará después.
+No tarda más de 5~8 ms.
+**** Mediano plazo
+Realiza el cambio entre memoria y swap.
+Puede o no estar presente.
+**** Largo plazo (Multiprogramación)
+Limita el número total de procesos ejecutandose en un sistema en cierto momento.
+
+Administrador de procesos para optimizar el uso de recursos de cómputo.
+
+*** Creación de procesos
+(Al inicio sólo existía init...)
+
+**** Proceso Padre
+Un proceso actualmente en memoria que se esta ejecutando.
+Sirve como modelo de memoria.
+***** Es una plantilla para nuevos procesos.
+***** Tiene procesos hijos
+***** Árbol de jerarquía de Procesos
+Hace uso de la llamada al sistema fork()
+
+
+#+begin_src plantuml :file imagen4.png
+(init)
+(Proceso 1)
+(Proceso 2)
+(Proceso 3)
+(init) -> (Proceso 1)
+(init) -> (Proceso 2)
+(init) -> (Proceso 3)
+#+end_src
+
+#+RESULTS:
+[[file:imagen4.png]]
+** Octava
+** Novena
+*** Comunicación interproceso
+Surge de la dependencia de datos entre dos o mas procesos. Forma de manejar esta dependencia.
+**** Memoria compartida
+Más fácil de implementar. Declaras un pedazo de memoria en donde le pones banderas para que pueda 
+ser leído y escrito por otros procesos. 
+**** Paso de mensajes
+***** Buzón de correo
+     Si un proceso crea un buzón de correo, solo puede leer mensajes que lleguén a el. 
+     Son archivos de escucha.
+***** Tuberias (Caso especial de sockets, sockets de unix)
+     Con pipe(int fd[]); se crea un archivo
+     El proceso que lo llama solo puede escribir, al que se le pasa solo puede leer.
+     Gracias a que llamamos fork() se compia el PCB junto con los descriptores de archivo.
+***** Sockets
+     El punto final entre la comunicación de procesos.
+     Estructura de datos asociada a un archivo. (Administrado por el kernel)
+     - Tupla = (direccion IP, puerto)
+       puerto = int 65535 (8 bits)
+       Si el puerto es menor a 1024 son puertos bien conocidos (Reservado por el kernel)
+** Decima
+*** Hilos
+Unidad básica de uso de CPU.
+Un hilo a diferencia de un proces no cuenta con espacio de texto, datos y descriptores de archivos.
+Es más rápido crear un hilo que un proceso.
+Necesita de hardware especial para su implementación.
+
+**** Estructura
+***** Contador de programa
+***** Conjunto de registros
+***** Pila
+
+**** Razónes para crear hilos 
+***** Mejor respuesta
+***** Escabilidad
+***** Administración de recursos
+***** Creación rápida
+
+**** Depende de la naturaleza del problema
+***** Dependencia
+****** Datos
+****** Cómputo
+
+**** Primer CPU con soporte hilos
+***** Intel Core Duo
+****** Pentium 4
+****** 2 hilos de ejecución
+****** Arquitectura x86
+
+**** Definir
+***** Trabajo a asignar por hilo
+Bibliotecas. En Unix tenemos Pthreads. Se encarga de Administración
+de los hilos o solo la creación de estos.
+***** ¿Cómo manejar Interrupciones?
+***** ¿Cuándo terminar la ejecución?
+***** ¿Cómo regresar información procesada por cada hilo?
+** Undecima
+*** Ley de Amdahl (Pregunta de examén)
+Describe la ganancia (en velocidad) para resolver un problema utilizando
+varios núcleos de procesamiento.
+1. Comparado con un sisteama de un solo núcleo de procesamiento
+2. Sea S el porcentaje del programa que hace uso de varios núcleos, sea N el número de 
+núcleos, la ganancia en velocidad (Speedup)
+
+Speedup =< 1/(S+((1/S)/N)) 
+
+*** Implementación de hilos
+**** Espacio de usuario
+Ventajas:
++ Son ligeros (fáciles de crear)
++ Rapidos (no hay cambio de contexto)
+Deventajas:
+- Se puede bloquear
+**** Kernel
++ Creación de hilos es una llamada al sistema
++ Se pueden apartar recursos por hilo
++ Los hilos son una estructura de datos dentro del Kernel
+- Puedo agotar los hilos del Kernel
+
+Cuando un hilo de espacio de usuario ejecuta una llamada al sistema
+un hilo de Kernel atiende dicha llamada al sistema.
+
+**** Modelos ejecución de hilos
+***** Uno a Uno
+****** hilo esp. usuario
+****** Magia
+****** hilo de kernel
+***** Muchos a Uno
+
+    |  |   |   |  |
+    \  |   |   |  /      -> Hilo espacio usuario
+     \ |   |   | /
+       ( Magia )
+           |         -> Hilo kernel
+
+***** Muchos a muchos
+
+    |   |   |   |   |
+    |   |   |   |   |  -> Usuario
+    (     Magia     )
+    |   |   |   |   |  -> Kernel
+    |   |   |   |   |   
+
+****** Políticas
+ No. hilos de Kernel por Proceso
+ Piscina de hilos (Thread pool)
+ No. fijo hilos de kernel al iniciar el S.O.
+
+
+***** Dos niveles
+** Duodecima
+*** Mutex
+Es una forma de crear exclusión mutua. 
+Es parte del Software.
+Tiene dos funciones acquire() y release()
+
+#+begin_src c 
+available = true;
+acquire(){
+   while(!available)
+      ; /* espera ocupada*/
+   available = false;
+}
+release(){
+   available = true;
+}
+#+end_src
+
+*** Semaforors
+Existen de dos tipos: binarios y contadores.
+Es una forma de obtener exclusión mutua.
+Es parte del Software.
+Tiene dos funciones wait() y signal().

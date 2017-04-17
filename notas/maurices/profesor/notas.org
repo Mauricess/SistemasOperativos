@@ -1,0 +1,403 @@
+* Notas 
+** Primera
+*** Buscar 
+1. Memoria baja
+2. ROM
+3. RAM
+4. DRAM
+   
+** Segunda
+*** Estructura de la memoria
+
+Estructura de un programa en la memoria del sistema operativo.
+ ________
+|________| Stack (datos locales)
+|________| heap (memoria dinamica) <- malloc()
+|________| BSS <- datos no inicializados
+|________| Datos
+|________| Código, texto
+
+*** Investigar
+- Proceso de inicio de Linux
+
+ https://en.wikipedia.org/wiki/Linux_startup_process  
+
+- Limites a usuarios
+
+ http://www.tecmint.com/set-limits-on-user-processes-using-ulimit-in-linux/
+
+- Tipos de S.O.
+
+- Estructura de S.O.
+
+** Tercera
+*** Metodo de arranque de Linux
+
+- BIOS (UEFI, EFI)
+- MBR (Información al principio del disco)
+- GRUB (Gestor de arranque) (Carga drivers y módulos)
+  (Investigar)
+  - Etapa 1 
+  - Etapa 2
+(Hasta aquí se busca un sistema operativo)
+(Aquí comienza el SO)
+- Kernel
+init - initrd
+  /  - virtual
+
+
+ 512 bytes
+ _________________________________________________
+|Programa|Tabla de Part.|BV|GRUB |________________|
+
+
+El directorio /proc contiene todos los procesos que estan trabajando. Es un directorio virtual.
+*** Investigar
+1. Niveles de ejecución.
+
+** Cuarta
+*** Hasta el momento
+- Restricciones 
+  - Grupos
+  - Permisos
+
+- (r) Read (4)
+- (w) Write (2)
+- (x) Execute (1)
+permiso desh. (0)
+
+Ejemplo
+-rw-r-xr-x 2 juan alumnos
+
+El primer guion es el tipo de archivo
+El primeros son permisos del usuario, los dos siguientes son los permisos
+del grupo, y el ultimo son los permisos de otros usuarios.
+
+Para poner o quitar permisos es:
+
+-rw----r--
+ 420000400
+
+chmod 604 archivo
+
+De otro modo
+- prop - (u)    ~
+- grupo - (g)    } a - todos
+- otros - (o)   ~
+- habilitar (+)
+- deshabilitar (-)
+
+chmod o-r
+chmod ug+rx
+chmod go-rwx
+
+Tipos de archivo 
+regular (-)
+directory (d)
+character special (c)
+block special (b)
+pipe (p)
+symbolic link (l)
+socket (s)
+
+*** Tipos de S.O.
+
+- Monoproceso
+- Multiproceso
+- Multiusuario
+- Monousuario
+- Tiempo compartido
+- Tiempo real
+- Integrados
+
+*** Revisar
+
+Que significa el numero cuando hacemos  ls -l sobre un directorio
+
+Estructuras de S.O.
+
+** Quinta
+*** Tablas de Inodos 
+La tabla de inodos es una estructura que consta de una serie de 
+bloques consecutivos, cada uno de los cuales contiene un número de 
+inodos predefinidos. 
+*** Revisar
+Capitulo 2 Sección 1 del Silverchatz
+
+** Sexta
+*** Capitulo 2 Silberschatz
+
+- Servicios
+- Seguridad
+- Sistema de archivos
+- Memoria
+- Ejecución de programas
+- Interfaces (línea de comando, gráfica)
+ 
+        Monolíticos
+        Capas
+Kernel  Microkernel
+        Multinúcleo
+        Modular
+
+  +------------+
+ |  Usuarios  |
+  +------------+
+ | Interfaces |
+  +------------+
+ |Aplicaciones|
+  +------------+
+ |  Llamadas  |
+  +------------+
+ | Servicios  |
+  +------------+
+ |   Kernel   |
+  +------------+
+ |  Hardware  |
+  +------------+
+
+*** Iniciar servicios
+  - kdm
+  - gdm
+  - red
+  - sshd
+** Septima
+*** Estructura de un SO
+
+                  Usuarios
+  +---------------------------------------------+
+ |   linea de comandos | GUI      |   batchh  |
+  +---------------------------------------------+
+ |                Aplicaciones                 |
+  +---------------------------------------------+
+ |            Llamadas                         |
+  +---------------------------------------------+
+ | filesystem |            accounting          |
+  +--------------------------------------------------------+
+ | Procesos | Manejo de archivos |Conexion entre procesos |
+  +--------------------------------------------------------+
+ |                       Hardware                         |
+  +--------------------------------------------------------+ 
+  
+** Octava
+*** Llamadas.
+**** Control de procesos
+***** Finalizar procesos (exit())
+***** Espera (wait())
+***** Envío de señales (kill)
+***** Creación de procesos (fork())
+***** Ejecución (exec())
+**** Manejo de archivos
+***** Abrir: open()
+***** Leer: read()
+**** Dispositivos
+***** malloc()
+**** Comunicación
+***** write() (sockets)
+***** read() (sockets)
+**** Información
+***** date
+***** time
+** Novena
+*** Estructura de Kernel
+1. Monolítico (Un gran bloque que contiene todas las funcionalidades)
+2. Microkernel (Un bloque pequeño, puede cargarse mas modulos)
+3. Modular
+4. Capas (Las funciones son encapsuladas en la siguiente capa aplicada. Agrega sobrecarga al SO)
+5. Híbrido (Se tiene un kernel con algunas funciones pero se puede expandir con modulos)
+** Decima
+*** Proceso
+Revisar las notas del ayudante.
+
+El espacio de memoria de un programa es un bloque de
+memoria. Su base es donde se termina y el limite es el
+tamaño del bloque.
+
+Se puede solicitar un espacio de direcciones adicional
+al SO, solo si este lo sosporta.
+
+*** Scheduler
+Determina la forma en que se va a ejecutar la cola de procesos.
+Una manera de orgnizar a los procesos.
+
+**** long-term
+Se encarga de atender los procesos que estan en estado de espera.
+**** short-term
+Se encarga de atender los procesos que estan en estado ready.
+**** medium-term
+Decide cuando cambia procesos de memoria principal a swap.
+** Undécima
+*** Expansión de Expresiones (Comandos)
+#+begin_src shell
+ls -l *.txt
+ls -l ~/datos.txt
+#+end_src
+Resolver las rutas a la que este haciendo referencia el usuario.
+(Investigar)
+*** Scheduler
+Programa que decide quien es el siguiente proceso que utilizará el
+procesador. 
+*** Estado del proceso
+Los valores que se encuentran en el momento actual en el proceso.
+*** Despachador
+**** Cambio de contexto
+Toma el estado del proceso actual, lo guarda; después toma el estado 
+del proceso que entrara en ejecución y lo pone en el procesador.
+** Duodécima
+Viernes antes de mi cumpleaños. Referirse a las de Andres.
+** Decimotercera
+*** Sección crítica
+Parte del codigo en donde se manejan variables compartidas.
+**** Solución de Peterson 
+#+begin_src c
+int bandera[2] = {0,0};
+turno  // No es necesario asignar un turno
+// Esta es un ejemplo de espera ocupada
+  p0: bandera[0] = 1;                            p1: bandera[1] = 1;
+      turno = 1;                                 turno = 0;
+      while(bandera[1] && turno == 1);           while(bandera[0] && turno == 0);
+           {/*no hace nada; espera.*/}              {/*no hace nada; espera.*/}
+      turno = 0;                                 turno = 1;
+      // sección crítica                         // sección crítica
+
+      // fin de la sección crítica              // fin de la sección crítica
+      bandera[0] = 0                             bandera[1] = 0
+#+end_src
+**** Condición de carrera
+Es un evento de la computación concurrente en donde la escritura o lectura de variables
+compartidas puede comprometer su integridad. 
+***** Alto nivel
+#+begin_src java
+// Inicio
+c = 2
+
+// Proceso A
+c = c-1
+if (c > 0){
+   log(c)
+}
+
+// Proceso B
+c = c-1
+if(c > 0){
+   log(c)   
+}
+#+end_src
+***** Nivel de maquina
+#+begin_src mips
+// Proceso A
+R1 <- c
+R2 <- R1-1
+c <- R2
+gt (c,0)
+--------- Cambio de contexto
+log c
+// Proceso B
+R2 <- c
+AC <- R2-1
+c <- AC
+gt (c,0)
+log c
+#+end_src
+**** Tipos de Kernel
+***** Apropiativos (preemted)
+Corta la ejecución de un proceso cuando lo cree necesario.
+***** No apropiativo
+El proceso es quien determina cuando se deja de ejecutar.
+** Decimocuarta
+*** Sección crítica
+**** Condiciones
+***** Exclusión mutua
+      Solo un proceso puede acceder a su sección crítica.
+***** Progreso
+***** Espera acotada
+
+**** Lectores y escritores.
+
+#+begin_src c
+int BUFFER_SIZE = 10;
+int posSig = 0;
+int sig;
+
+// Productor
+sig = prod_nuevo();
+while(posSig == BUFFER_SIZE){}
+buffer[posSig] = sig;
+posSig++;
+
+// Consumidor
+while(posSig-1 < 0){}
+procesa = buffer[posSig-1];
+posSig--;
+#+end_src
+** Decimoquinta
+*** Problema de sección crítica
+**** Espera acotada
+**** Exclusión mutua
+**** Progreso
+
+#+begin_src c
+boolean flags[2] = {false,false};
+int turno = 0;
+
+do{
+   // Entrada
+   flags[0] = true;
+   turno = 1; // Condición de carrera
+   // Espera ocupada
+   while(flags[0] == true && turno == 1){
+      //Seccion crítica
+   }
+   // Salida
+   flags[0] = false;
+}
+#+end_src
+
+
+**** Revisar
+La condición de carrera.
+test_and_set
+compare_and_swap
+
+Examén es el viernes.
+** Decimosexta
+*** Soluciones por Hardware (Condición de carrera)
+**** Operaciones atómicas
+***** test and set
+#+begin_src c
+// Test and set
+boolean test_and_set(boolean *t){
+   boolean r = *t;
+   *t = true;
+   return(r);
+}
+
+// Sección crítica
+void Critical() {
+    while (test_and_set(&lock));
+    critical section; // only one process can be in this section at a time
+    lock = false; // release lock when finished with the critical section
+}
+#+end_src
+***** compare and swap
+#+begin_src c
+// Metodo Compare and Swap
+int compare_and_swap(int *v, int esp, int nuevo){
+   int t = *v;
+   if(*v == esp){
+      *v == nuevo;
+   }
+   return(t);
+}
+
+// Sección crítica
+int lock = 0;
+void Critical(){
+   while(compare_and_swap(lock, 0, 1) != 0);
+   critical section;
+   lock = 0; 
+}
+#+end_src
+**** Vector de interrupciones
+***** Desactivar
+Puede no ser efectivo si se tiene mas de un núcleo de procesamiento.

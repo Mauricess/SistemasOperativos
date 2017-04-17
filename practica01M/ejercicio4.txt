@@ -1,0 +1,13 @@
+- Funcion como parametro:
+
+Un prototipo de una funcion que toma una funcion como parametro es:
+
+void fun (void (*f)(int));
+
+Esto indica que el parametro f sera un apuntador a una funcion que tiene como tipo
+de retorno void y que obtiene un solo parametro de tipo int.
+
+- Definicion de thread:
+
+Un thread es una componente de un proceso. Es la sequencia de instrucciones mas
+pequena que puede ser manejada de forma independiente por el scheduler del SO.
