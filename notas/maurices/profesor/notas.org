@@ -401,3 +401,78 @@ void Critical(){
 **** Vector de interrupciones
 ***** Desactivar
 Puede no ser efectivo si se tiene mas de un núcleo de procesamiento.
+** Decimoseptima 
+Filosofos
+
+#+begin_src c
+fn si (n%2) == 0
+      while(acquire(Pn-1));
+      while(acquiere(Pn));
+   si (n%2) != 0
+      while(acquire(Pn));
+      while(acquiere(Pn-1));   
+   // Seccion Critica
+   release(Pn);
+   release(Pn-1)
+#+end_src
+
+Para un Proceso son necesarios tres buffers
+    
+         - Entrada
+        /
+Proceso - Salida
+         \
+         - Errores
+
+Las bases de datos es el problema de lectores y escritores.
+La solución depende del uso que vamos a ver.
+
+Revisar!
+** Decimoctava
+Examen de Concurrente y Lineal. Referirse a las notas de Andres.
+** Decimonovena
+*** Tarea 
+Revisar:
+1. Monitores
+2. Filosofos con Monitores.
+
+*** Scheduling
+**** Cambio a modo kernel
+¿Siguiente? - algoritmo - criterio
+**** Cambio de contexto (despachador(cargador))
+**** Cambio a modo usuario
+**** Localizamos la siguiente instrucción
+
+***** Scheduler
+****** Short-term - CPU Scheduler 
+****** Medium-term - Mem virtual <-> física
+****** Long-term - I/O
+
+***** Critérios
+****** Tiempos de espera
+****** Tiempos de respuesta
+****** Tiempo de finalizacion
+****** Throughput (Numero de procesos ejecutados por unidad de tiempo)
+****** Uso de CPU
+
+***** First Come First Served (FCFS)
+      Llego a ser utilizado en Windows y en los primeros sistemas Unix
+***** Shortest Job First (SJF)
+      Toma el proceso mas pequeño y lo coloca en el CPU
+** Veinteava
+*** Scheduling
+**** Procedimientos implementados
+***** Shortest Job First (SJF)
+- Teórico
+- Aplica al short-term scheduler (CPU)
+***** Prioridades
+- Puede darse starvation a los procesos con una prioridad grande.
+***** Round Robin 
+- quantum(time slice)
+- Cada proceso tiene una cantidad de rafaga de trabajo.
+- Se le otorga un quantum a cada proceso y al finalizar se le da al siguiente.
+***** Multinivel
+- sistema
+- usuario
+- interactivos
+- batch

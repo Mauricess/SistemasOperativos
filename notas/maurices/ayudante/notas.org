@@ -287,7 +287,7 @@ deactivate Proceso1
 [[file:imagen3.png]]
 ** Septima 
 *** Calendarización 
-Existen tres tipos:
+    Existen tres tipos:
 **** Corto plazo 
 Realiza cambio de contexto, señala el proceso que ejecutará después.
 No tarda más de 5~8 ms.
@@ -335,7 +335,7 @@ ser leído y escrito por otros procesos.
      Si un proceso crea un buzón de correo, solo puede leer mensajes que lleguén a el. 
      Son archivos de escucha.
 ***** Tuberias (Caso especial de sockets, sockets de unix)
-     Con pipe(int fd[]); se crea un archivo
+      Con pipe(int fd[]); se crea un archivo
      El proceso que lo llama solo puede escribir, al que se le pasa solo puede leer.
      Gracias a que llamamos fork() se compia el PCB junto con los descriptores de archivo.
 ***** Sockets
@@ -355,7 +355,6 @@ Necesita de hardware especial para su implementación.
 ***** Contador de programa
 ***** Conjunto de registros
 ***** Pila
-
 **** Razónes para crear hilos 
 ***** Mejor respuesta
 ***** Escabilidad
@@ -457,3 +456,146 @@ Existen de dos tipos: binarios y contadores.
 Es una forma de obtener exclusión mutua.
 Es parte del Software.
 Tiene dos funciones wait() y signal().
+** Trigésima
+*** Hilos (Modelo muchos a muchos)
+
+
+ | | |  -> hilo usuario
+(     ) -> magia
+ | | |  -> hilo Kernel 
+
+¿Cuántos hilos dde kernel por proceso hay que crear?
+Especificar ese número al momento de crear el proceso.
+
+**** Piscinas de hilos (ThreadPool)
+Conjunto de hilos de kernel reservados para un proceso 
+***** Dinámico
+***** Estático
+
+Ventajas
+1. Peticiones se atienden más rápido
+2. Se limita el número total de hilos de Kernel
+3. La tarea de crear hilos es delegada al S.O. permitiendo
+que se concentre en el trabajo a realizar.
+
+Hay "1" piscina por proceso.
+
+**** Señales
+Evento que ocurre y le interesa a un proceso/hilo.
+***** Sincronas
+Enviadas al mismo proceso que genera la señal.
+***** Asíncronas
+Enviados a otro proceso.
+
+Cíclo de vida.
+1. Ocurre evento
+2. Evento genera señal
+3. Señal se entrega el proceso interesado.
+4. Proceso interesado maneja dicha señal
+
+Todas las señales posoen un manejadro por defecto
+definido por el kernel.
+1. Se maneja por defecto
+2. Lo define el usuario
+
+¿Qué hacer con la señal en un proceso multihilo?
+
+1. Enviar la señal al mejor hilo candidato.
+2. Entregar la señal a todos los hilos.
+3. Entregar la señal a ciertos hilos.
+4. Asignar un hilo específico para el manejo de señales.
+
+La elección de política depende de la naturaleza de la señal.
+
+#+begin_src c
+kill (pid_t pid, int señal);
+pthread_kill(pthread_d tid, int señal);
+#+end_src
+
+****  Cancelación de hilos.
+Eliminar un hilo antes de que termine su ejecución.
+
+-> El hilo a exterminar recibe el nombre "hilo objetivo" (target thread).
+
+Un hilo puede ser exterminado de 2 formas.
+***** Síncrona
+Un hilo x(terminator) elimina al hilo objetivo.
+***** Deferida
+El hilo objetivo arregla su partida y termina de manera agradecida.
+
+#+begin_src c
+pthread_t hilo;
+pthread_create(&hilo,0,NULL);
+/* trabajo */
+pthread_cancel(&hilo);
+#+end_src
+Por defecto es diferida.
+La manera síncrona también es soportada.
+
+#+begin_src c
+pthread_testcancel();
+#+end_src
+Punto de cancelación pendiente.
+Si hay punto de cancelación pendiente se ejecuta 
+un manejador de limpieza encargado de liberar los recursos
+asignados al hilo para después terminarse.
+
+¿Cómo asignamos una variable local con alcance solo al hilo?
+
+Thread Local Storage (TLS)
+
+Sección de memoria única para cada hilo.
+** Cuatrogésima(4/20/2017)
+*** Comunicación entre bibliotecas de hilos y Kernel
+- Para comunicar un hilo de usuario con un hilo 
+de kernel se crea una estructura de datos
+llamada "proceso de peso ligero" (Lightweigth process) (LWP)
+- Para los hilos de usuario el LWP actúa como un procesador 
+que se encarga de ejecutar dichos hilos.
+
+|    |     |  <- Hilo de usuario
+------------ 
+(   LWP    )
+------------
+     |     
+   ( k )    <- Hilo de kernel
+
+
+- El LWP se asocia a un hilo de Kernel que 
+ejecuta el código correspondiente en el CPU físico
+
+- Kernel monitorea las acciones de los hilos de
+ usuario en busca de bloqueos potenciales.
+
+- El LWP actúa como un monitor que detecta bloqueos.
+
+- El Kernel envía una señal al proceso de peso ligero 
+para detectar al hilo que se bloqueará, aislándolo
+del resto (upcall) 
+
+- El manejador de dicha señal se llama upcallhandler
+
+- El upcall handler tiene como objetivo asegurar que
+los otros hilos continúen con su ejecución.
+
+
+#+begin_src c
+upcallHandler(pthread_t tid){
+   // Solicita a kernel un nuevo LWP;
+   // Selecciona los hilos cuyo indentificador hilo != tid;
+   // Traslada esos hilos al nuevo LWP
+   // Elige un hilo para su ejecución;
+} 
+#+end_src
+
+- En UNIX los programas cargados en memoria se llama "tareas" (task)
+
+- Los hilos (dentro de UNIX) son tareas.
+
+- En UNIX la diferencia entre proceso e hilo es mínima.
+
+- El Kernel de UNIX utiliza apuntadores dentro del PCB
+
+- Proceso utiliza fork()
+
+- Hilo utiliza clone(). Este es más flexible. 
