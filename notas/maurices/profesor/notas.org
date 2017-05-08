@@ -459,12 +459,13 @@ Revisar:
       Llego a ser utilizado en Windows y en los primeros sistemas Unix
 ***** Shortest Job First (SJF)
       Toma el proceso mas pequeño y lo coloca en el CPU
-** Veinteava
+** Veinteavo
 *** Scheduling
 **** Procedimientos implementados
 ***** Shortest Job First (SJF)
 - Teórico
 - Aplica al short-term scheduler (CPU)
+T_(n+1) = a*t_n + (1-a)T_n  con a = 1/2 T_0 = 0.5
 ***** Prioridades
 - Puede darse starvation a los procesos con una prioridad grande.
 ***** Round Robin 
@@ -476,3 +477,82 @@ Revisar:
 - usuario
 - interactivos
 - batch
+** Veintiuna
+*** Scheduling
+**** Multinivel
+**** Retroalimentación
+Es un flujo de procesos en donde se encola en lugares donde se les asigna
+un quantum. Si no termina con ese quantum avanza al siguiente. Así hasta que termina.
+Si llega al utlimo nivel y no termina se vuelve a encolar en la primera fila.
+
+
+*** AMP - SMP (Asymetric and Symetric Multiprocessing)
+
+**** AMP
+Solo un procesador tiene acceso a las estructuras del sistema.
+Existe un proceso que indica que proceso va a ir a que procesador.
+
+**** SMP
+Todos los procesadores tienen acceso a las estructuras del sistema.
+Cualquier procesador puede atender cualquier proceso. 
+El Scheduler solo le indica cual es el siguiente proceso.
+
+
+*** Revisar
+    Revisar como se hace el Scheduling para los threads.
+** Veintidós
+*** Monitores 
+** Veintitres
+*** Nice number
+    Es parte del PCB.
+    Indica la prioridad del proceso.
+*** Sistemas en tiempo real
+**** Latencia
+***** Interrupción
+***** Interpretar Interrupción
+***** Cambio de contexto
+***** Liberar recursos
+***** Respuesta
+** Veinticuatro
+*** SO Tiempo real
+**** Rendimiento
+     Latencia de Interrupción.
+     Latencia del despachador.
+**** Prioridades
+**** Apropiativo
+**** Vector de interrupciones < Intervalo
+**** Soft
+     No necesariamente garantiza tiempo acotado.
+**** Hard
+     Garantizar respuestas en tiempo acotado.
+
+**** Rate monotonic
+***** Prioridades estáticas
+***** Apropiativo
+
+**** Algoritmo de control de admisión
+     t - tiempo de procesamiento
+     d - deadline
+     p - periodo
+     Px - Proceso x
+     dx - deadline de Px
+     
+     Si dx < d entonces admitimos a Px.
+     De otra manera no admitimos a Px.
+
+*** Scheduling en Windows
+    Basado en prioridades - Hilo con mayor prioridad siempre se ejecuta.
+    Apropiativo.
+    Scheduler -> dispatcher
+    Hilo en ejecución continua hasta que
+    - Hilo con mayor prioridad (apropiativo)
+    - Finaliza.
+    - Quantum finaliza.
+    - Llamada con bloqueo.
+    Procesos en tiempo real - prioridad sobre otros.
+    Prioridades en clases (niveles).
+    - Clase variable.
+    - Clase tiempo real.
+    Prioridad 0 - rutina de manejo de memoria.
+    Clases de prioridades.
+** Veinticinco

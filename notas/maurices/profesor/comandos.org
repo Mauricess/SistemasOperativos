@@ -26,6 +26,8 @@ En /etc/shells es donde se encuentran los shells soportados.
 15. wc (word count)
 16. top
 17. ps
+18. nice
+19. renice
 ** Comandos para revisar discos o archivos
 1. fdisk (Modificar la tabla de particiones)
 2. mkfs

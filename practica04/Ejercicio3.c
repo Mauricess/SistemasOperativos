@@ -52,7 +52,7 @@ void install(){
   system("tar xf linux-4.10.10.tar.xz");
   printf("Termino!\n");
   printf("Creando el archivo .config\n");
-  system("cd linux-4.10.10/ && make olddefconfig");
+  system("cd linux-4.10.10/ && make olddefconfig");   // localmodconfig
   printf("Termino!\n");
   printf("Iniciando la configuracion...\n");
   system("cd linux-4.10.10/ && make menuconfig");
