@@ -556,3 +556,14 @@ El Scheduler solo le indica cual es el siguiente proceso.
     Prioridad 0 - rutina de manejo de memoria.
     Clases de prioridades.
 ** Veinticinco
+*** Deadlocks
+**** Condiciones
+***** Exclusión mutua
+Esta siempre se va a dar.
+***** Espera circular
+***** Hold and wait
+***** Recurso - no apropiativo
+
+**** Se puede
+***** Evitarlos
+***** Prevenirlos
