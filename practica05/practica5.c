@@ -38,3 +38,32 @@ void montarSistArchivos(char *fuente, char *destino){
   }
 
 }
+
+void copiarFuente(char *fuente, char *destino)
+{
+ DIR *f = NULL;
+  char fil[64];
+  char instr[64];
+  struct dirent *drnt = NULL;
+  f = opendir(fuente);
+  if(f){
+    while (drnt = readdir(f)) {
+      if(!strcmp(drnt->d_name,"."))
+        continue;
+      if(!strcmp(drnt->d_name,".."))
+        continue;
+      if(drnt->d_type == 10){
+        sprintf(fil,"%s/%s",fuente,drnt->d_name);
+        sprintf(instr,"cp -r %s %s",fil,destino);
+        system(instr);
+      }else{
+        sprintf(fil,"%s/%s",fuente,drnt->d_name);
+        sprintf(instr,"cp %s %s",fil,destino);
+        system(instr);
+      }
+    }
+    closedir(f);
+  }else{
+    printf("No se puede abrir el directorio %s\n", fuente);
+  } 
+}
