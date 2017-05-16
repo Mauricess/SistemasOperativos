@@ -34,11 +34,11 @@ int main(int argc, char const *argv[]) {
 void montarSistArchivos(char *fuente, char *destino){  
   struct stat st = {0};  
   if (stat(destino, &st) == -1) {
-    mkdir(destino, 0700);
+    mkdir(destino, 0777);
     printf("Carpeta destino creada con exito\n");
   }
   
-  int res = mount(fuente, destino, "tmpfs", 0, "");
+  int res = mount(fuente, destino, "tmpfs", 0, "mode=0777");
 
   if (res == 0) {
     printf("Montado sobre RAM exitoso en la ubicacion: %s...\n", destino);
@@ -67,11 +67,11 @@ void copiarFuente(char *fuente, char *destino)
         continue;
       if(drnt->d_type == 10){
         sprintf(fil,"%s/%s",fuente,drnt->d_name);
-        sprintf(instr,"cp -r %s %s",fil,destino);
+        sprintf(instr,"cp -rp %s %s",fil,destino);
         system(instr);
       }else{
         sprintf(fil,"%s/%s",fuente,drnt->d_name);
-        sprintf(instr,"cp %s %s",fil,destino);
+        sprintf(instr,"cp -a %s %s",fil,destino);
         system(instr);
       }
     }
