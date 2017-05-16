@@ -12,10 +12,25 @@ void copiarFuente(char *fuente, char *destino);
 void copiarDestino(char *fuente, char *destino);
 
 int main(int argc, char const *argv[]) {
-  char *destino = "destino";
-  char *fuente = "fuente";
+
+  FILE *f;
+  char *destino = malloc(sizeof(char) * 256);
+  char *fuente = malloc(sizeof(char) * 256);
+
+  f = fopen(argv[1], "r");
+  
+  fscanf(f, "%s", fuente);
+  fscanf(f, "%s", destino);
+
+  printf("%s\n", fuente);
+  printf("%s\n", destino);
  
   montarSistArchivos(fuente, destino);
+  copiarFuente(fuente, destino);
+  printf("Presiona <enter> cuando hayas terminado de trabajar.");
+  getchar();
+  copiarDestino(fuente, destino);
+  umount(destino);
   return 0;
 }
 
@@ -30,9 +45,9 @@ void montarSistArchivos(char *fuente, char *destino){
 
   if (res == 0) {
     printf("Montado sobre RAM exitoso en la ubicacion: %s...\n", destino);
-    printf("Presiona <enter> para desmontar\n");
-    getchar();
-    umount(destino);
+    //printf("Presiona <enter> para desmontar\n");
+    //getchar();
+    //umount(destino);
   }
   else{
     printf("Error al montar.\n");
