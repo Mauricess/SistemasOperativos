@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <sys/mount.h>
+#include <dirent.h>
 
 void montarSistArchivos(char *fuente, char *destino);
 void copiarFuente(char *fuente, char *destino);
