@@ -14,22 +14,19 @@ void copiarDestino(char *fuente, char *destino);
 int main(int argc, char const *argv[]) {
 
   FILE *f;
-  char *destino = malloc(sizeof(char) * 256);
-  char *fuente = malloc(sizeof(char) * 256);
+  char *destino = malloc(sizeof(char) * 512);
+  char *fuente = malloc(sizeof(char) * 512);
 
   f = fopen(argv[1], "r");
   
   fscanf(f, "%s", fuente);
   fscanf(f, "%s", destino);
-
-  printf("%s\n", fuente);
-  printf("%s\n", destino);
  
   montarSistArchivos(fuente, destino);
   copiarFuente(fuente, destino);
   printf("Presiona <enter> cuando hayas terminado de trabajar.");
   getchar();
-  copiarDestino(fuente, destino);
+  //copiarDestino(fuente, destino);
   umount(destino);
   return 0;
 }
@@ -58,8 +55,8 @@ void montarSistArchivos(char *fuente, char *destino){
 void copiarFuente(char *fuente, char *destino)
 {
  DIR *f = NULL;
-  char fil[64];
-  char instr[64];
+  char fil[512];
+  char instr[512];
   struct dirent *drnt = NULL;
   f = opendir(fuente);
   if(f){
